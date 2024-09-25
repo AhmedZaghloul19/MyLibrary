@@ -6,8 +6,17 @@ import UIKit
 
 public struct Test {
     public static func getDocumentsDirectory() -> URL? {
-        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+        let directoryPath =  NSHomeDirectory().appending("/Documents/")
+        if !FileManager.default.fileExists(atPath: directoryPath) {
+            do {
+                try FileManager.default.createDirectory(at: NSURL.fileURL(withPath: directoryPath), withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                print(error)
+            }
+        }
+        return URL(string: directoryPath)
     }
+
     
     public static func loadScreenshot() -> UIImage? {
         guard let directory = getDocumentsDirectory() else { return nil }
